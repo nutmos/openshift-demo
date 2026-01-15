@@ -41,3 +41,18 @@ spec:
   selector:
     app: kibana
   type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  labels:
+    app: kibana
+  name: kibana
+spec:
+  port:
+    targetPort: console
+  to:
+    kind: ""
+    name: kibana
+    weight: null

@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-openshift
+  name: node-selector-demo
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: hello-openshift
+      app: node-selector-demo
   template:
     metadata:
       labels:
-        app: hello-openshift
+        app: node-selector-demo
     spec:
       containers:
       - name: hello-openshift

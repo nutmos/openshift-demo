@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-openshift
+  name: tsc-demo
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: hello-openshift
+      app: tsc-demo
   template:
     metadata:
       labels:
-        app: hello-openshift
+        app: tsc-demo
     spec:
       containers:
       - name: hello-openshift
@@ -23,4 +23,4 @@ spec:
             whenUnsatisfiable: ScheduleAnyway
             labelSelector:
               matchLabels:
-                app: hello-openshift
+                app: tsc-demo

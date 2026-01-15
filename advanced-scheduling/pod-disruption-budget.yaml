@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-openshift
+  name: pdb-demo
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: hello-openshift
+      app: pdb-demo
   template:
     metadata:
       labels:
-        app: hello-openshift
+        app: pdb-demo
     spec:
       containers:
       - name: hello-openshift
@@ -21,9 +21,9 @@ spec:
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: hello-openshift
+  name: pdb-demo
 spec:
   minAvailable: 2
   selector:
     matchLabels:
-      app: hello-openshift
+      app: pdb-demo

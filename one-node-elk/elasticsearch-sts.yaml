@@ -43,3 +43,19 @@ spec:
           requests:
             storage: 200Gi
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: elasticsearch
+  name: elasticsearch
+spec:
+  ports:
+  - name: api
+    port: 9200
+    protocol: TCP
+    targetPort: api
+  selector:
+    app: elasticsearch
+  type: ClusterIP

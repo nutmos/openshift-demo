@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kibana
+  namespace: elastic
+spec:
+  serviceName: kibana
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: elasticsearch
+          image: 'docker.elastic.co/kibana/kibana:9.2.4'
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: http://elasticsearch.elastic.svc:9200
+          ports:
+            - containerPort: 5601
+              name: console
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: kibana
+  name: kibana
+spec:
+  ports:
+  - name: console
+    port: 5601
+    protocol: TCP
+    targetPort: console
+  selector:
+    app: kibana
+  type: ClusterIP

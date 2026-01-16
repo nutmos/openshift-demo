@@ -1,0 +1,20 @@
+apiVersion: observability.openshift.io/v1
+kind: ClusterLogForwarder
+metadata:
+  name: instance
+  namespace: openshift-logging
+spec:
+  serviceAccount:
+    name: logcollector
+  outputs:
+  - name: logstash
+    type: http
+    http:
+      url: http://logstash.elastic.svc:8080
+  pipelines:
+  - inputRefs:
+    - infrastructure
+    name: logstash-fwd
+    outputRefs:
+    - logstash
+---

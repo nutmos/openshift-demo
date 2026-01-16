@@ -56,3 +56,7 @@ spec:
     kind: ""
     name: kibana
     weight: null
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+  wildcardPolicy: None

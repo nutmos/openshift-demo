@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      labels:
+        app: logstash
+    spec:
+      containers:
+      - name: logstash
+        image: docker.elastic.co/logstash/logstash:9.2.4
+        env:
+          - name: LS_JAVA_OPTS
+            value: -Xms2g -Xmx2g
+        ports:
+        - containerPort: 8080
+          name: http-input
+        volumeMounts:
+        - name: pipelines
+          mountPath: /usr/share/logstash/pipeline
+      volumes:
+      - name: pipelines
+        configMap:
+          name: logstash-pipelines
+---
+apiVersion: v1
+data:
+  logstash.conf: |
+    input {
+      http {
+        port => 8080
+      }
+    }
+    output {
+      elasticsearch {
+        hosts => "http://elasticsearch.elastic.svc:9200"
+        index => "infrastructure-%{+YYYY.MM.dd}"
+      }
+    }
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: logstash-pipelines
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: logstash
+  name: logstash
+spec:
+  ports:
+  - name: http-input
+    port: 8080
+    protocol: TCP
+    targetPort: http-input
+  selector:
+    app: logstash
+  type: ClusterIP

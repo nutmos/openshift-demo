@@ -1,0 +1,12 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: aws-provider
+spec:
+  provider: aws
+  parameters:
+    accessKeyIDSecretRef: "aws-creds:accessKeyID"
+    secretAccessKeySecretRef: "aws-creds:secretAccessKey"
+    objects: |
+      - objectName: "prod/AppBeta/Authen"
+        objectType: "secretsmanager"

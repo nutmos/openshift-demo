@@ -1,0 +1,8 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: vault-token
+  namespace: eso-test
+stringData:
+  token: abcdef
+type: Opaque

@@ -1,0 +1,36 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: httpd-config
+  namespace: cert-offload
+immutable: false
+data:
+  cert-offload.conf: |-
+    LoadModule proxy_module modules/mod_proxy.so
+    LoadModule proxy_http_module modules/mod_proxy_http.so
+    LoadModule proxy_connect_module modules/mod_proxy_connect.so
+    LoadModule ssl_module modules/mod_ssl.so
+    <VirtualHost *:8080>
+        ServerName httpd.cert-offload.svc
+
+        # Enable forward proxy
+        ProxyRequests On
+        ProxyVia On
+
+        # Enable SSL for outbound connections to upstream
+        SSLProxyEngine On
+
+        # Verify upstream server's certificate (recommended)
+        SSLProxyVerify none
+        SSLProxyCheckPeerCN off
+        SSLProxyCheckPeerName off
+        SSLProxyCheckPeerExpire off
+
+        # Upgrade outbound requests to HTTPS
+        ProxyPass / https://s3.openshift-storage.svc/
+        ProxyPassReverse / https://s3.openshift-storage.svc/
+
+        # Rewrite HTTP → HTTPS for the proxy target
+        RequestHeader set X-Forwarded-Proto "https"
+
+    </VirtualHost>

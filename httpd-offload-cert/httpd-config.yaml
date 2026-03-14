@@ -13,6 +13,10 @@ data:
     <VirtualHost *:8080>
         ServerName httpd.cert-offload.svc
 
+        LogLevel debug proxy:trace5
+        LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Authorization}i\" \"%{Host}i\"" proxy_debug
+        CustomLog /var/log/httpd/proxy_access.log proxy_debug
+
         # Enable forward proxy
         ProxyRequests On
         ProxyVia On
@@ -25,6 +29,10 @@ data:
         SSLProxyCheckPeerCN off
         SSLProxyCheckPeerName off
         SSLProxyCheckPeerExpire off
+
+        #ProxyPreserveHost Off
+        #RequestHeader set Host "s3.openshift-storage.svc"
+        ProxyPreserveHost On
 
         # Upgrade outbound requests to HTTPS
         ProxyPass / https://s3.openshift-storage.svc/

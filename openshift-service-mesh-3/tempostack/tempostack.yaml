@@ -1,0 +1,88 @@
+apiVersion: tempo.grafana.com/v1alpha1
+kind: TempoStack
+metadata:
+  name: sample
+  namespace: tempo
+spec:
+  networkPolicy:
+    enabled: true
+  observability:
+    grafana:
+      instanceSelector: {}
+    metrics: {}
+    tracing:
+      jaeger_agent_endpoint: 'localhost:6831'
+  timeout: 30s
+  resources:
+    total:
+      limits:
+        cpu: '2'
+        memory: 2Gi
+  search:
+    defaultResultLimit: 20
+    maxDuration: 0s
+  managementState: Managed
+  limits:
+    global:
+      ingestion: {}
+      query:
+        maxSearchDuration: 0s
+  serviceAccount: tempo-sample
+  images: {}
+  template:
+    compactor:
+      podSecurityContext: {}
+      replicas: 1
+    distributor:
+      component:
+        podSecurityContext: {}
+        replicas: 1
+      tls:
+        enabled: false
+    gateway:
+      component:
+        podSecurityContext: {}
+        replicas: 1
+      enabled: false
+      ingress:
+        route: {}
+      rbac:
+        enabled: false
+    ingester:
+      podSecurityContext: {}
+      replicas: 1
+    querier:
+      podSecurityContext: {}
+      replicas: 1
+    queryFrontend:
+      component:
+        podSecurityContext: {}
+        replicas: 1
+      jaegerQuery:
+        authentication:
+          enabled: true
+          sar: '{"namespace": "tempo", "resource": "pods", "verb": "get"}'
+        enabled: true
+        ingress:
+          route:
+            termination: edge
+          type: route
+        monitorTab:
+          enabled: false
+          prometheusEndpoint: ''
+        servicesQueryDuration: 72h0m0s
+        tempoQuery: {}
+      mcpServer: {}
+  replicationFactor: 1
+  storage:
+    secret:
+      name: tempostack-s3
+      type: s3
+    tls:
+      enabled: false
+  storageSize: 1Gi
+  hashRing:
+    memberlist: {}
+  retention:
+    global:
+      traces: 48h0m0s

@@ -7,7 +7,8 @@ spec:
   networkPolicy:
     enabled: true
   observability:
-    metrics: {}
+    metrics:
+      enableMetrics: true
   deploymentUpdateStrategy: {}
   config:
     exporters:
@@ -16,6 +17,11 @@ spec:
       debug:
         verbosity: detailed
         use_internal_logger: false
+      prometheus:
+        endpoint: 0.0.0.0:8989
+        metric_expiration: 10m
+        resource_to_telemetry_conversion:
+          enabled: true # by default resource attributes are dropped
     receivers:
       otlp:
         protocols:
@@ -25,6 +31,12 @@ spec:
             endpoint: '0.0.0.0:4318'
     service:
       pipelines:
+        metrics:
+          exporters:
+            - debug
+            - prometheus
+          receivers:
+            - otlp
         traces:
           exporters:
             - debug

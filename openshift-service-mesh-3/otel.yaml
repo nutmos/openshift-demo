@@ -11,6 +11,8 @@ spec:
   deploymentUpdateStrategy: {}
   config:
     exporters:
+      otlphttp/tempo:
+        endpoint: http://tempo-sample-distributor.tempo.svc.cluster.local:4318
       debug:
         verbosity: detailed
         use_internal_logger: false
@@ -26,6 +28,7 @@ spec:
         traces:
           exporters:
             - debug
+            - otlphttp/tempo
           receivers:
             - otlp
       telemetry:

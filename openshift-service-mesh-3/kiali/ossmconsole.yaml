@@ -1,0 +1,12 @@
+apiVersion: kiali.io/v1alpha1
+kind: OSSMConsole
+metadata:
+  name: ossmconsole
+  namespace: istio-system
+spec:
+  deployment:
+    imagePullPolicy: IfNotPresent
+  kiali:
+    serviceName: ''
+    serviceNamespace: ''
+  version: default

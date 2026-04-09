@@ -135,10 +135,34 @@ spec:
         insecure_skip_verify: false
         type: none
         use_kiali_token: false
-      enabled: false
+      dashboards:
+       - name: Istio Service Dashboard
+         variables:
+           datasource: var-datasource
+           namespace: var-namespace
+           service: var-service
+           version: var-version
+       - name: Istio Workload Dashboard
+         variables:
+           datasource: var-datasource
+           namespace: var-namespace
+           version: var-version
+           workload: var-workload
+       - name: "Istio Mesh Dashboard"
+         variables:
+           namespace: "var-namespace"
+           workload: "var-workload"
+           datasource: "var-datasource"
+       - name: "Istio Ztunnel Dashboard"
+         variables:
+           namespace: "var-namespace"
+           workload: "var-workload"
+      enabled: true
       is_core: false
       project: istio
-      url_format: ''
+      url_format: openshift
+      project: perses-dev
+      external_url: "https://console-openshift-console.apps.cluster-m6jjv.m6jjv.sandbox5299.opentlc.com"
     prometheus:
       auth:
         insecure_skip_verify: false

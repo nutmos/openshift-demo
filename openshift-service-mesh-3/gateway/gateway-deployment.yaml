@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ingressgateway
-  namespace: common-gateway
+  namespace: bookinfo
 spec:
   selector:
     matchLabels:
@@ -22,10 +22,8 @@ spec:
             capabilities:
               drop:
               - ALL
-            #allowPrivilegeEscalation: false
-            #privileged: false
-            allowPrivilegeEscalation: true
-            privileged: true
+            allowPrivilegeEscalation: false
+            privileged: false
             readOnlyRootFilesystem: true
             runAsNonRoot: true
           ports:
@@ -43,17 +41,17 @@ spec:
         sysctls:
         - name: net.ipv4.ip_unprivileged_port_start
           value: "0"
-      serviceAccountName: gateway
+      serviceAccountName: secret-reader
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: bookinfo-gateway
-  namespace: common-gateway
+  name: ingressgateway
+  namespace: bookinfo
 spec:
-  type: ClusterIP 
+  type: ClusterIP
   selector:
-    istio: bookinfo-gateway
+    istio: ingressgateway
   ports:
     - name: status-port
       port: 15021
@@ -62,8 +60,8 @@ spec:
     - name: http2
       port: 80
       protocol: TCP
-      targetPort: 80
+      targetPort: 8080
     - name: https
       port: 443
       protocol: TCP
-      targetPort: 443
+      targetPort: 8443

@@ -8,11 +8,19 @@ spec:
     istio: ingressgateway
   servers:
   - port:
-      number: 80
+      number: 8080
       name: http-80
-      protocol: HTTPS
+      protocol: HTTP
     hosts:
     - '*'
+  - port:
+      number: 8443
+      name: http-80
+      protocol: HTTP
+    hosts:
+    - '*'
+    tls:
+      mode: SIMPLE
   #- port:
   #    number: 443
   #    name: https-443
@@ -31,15 +39,15 @@ metadata:
   namespace: bookinfo
 spec:
   hosts:
-  - bookinfo.com
+  - bookinfo-gateway-bookinfo.apps.cluster-m6jjv.m6jjv.sandbox5299.opentlc.com 
   gateways:
   - bookinfo-gateway
   http:
   - match:
     - uri:
-        prefix: /reviews/
+        prefix: /
     route:
     - destination:
         port:
           number: 9080
-        host: reviews.bookinfo.svc.cluster.local
+        host: productpage.bookinfo.svc.cluster.local

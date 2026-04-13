@@ -1,74 +1,28 @@
-apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
+apiVersion: opentelemetry.io/v1beta1
 metadata:
   name: otel
   namespace: istio-system
 spec:
-  networkPolicy:
-    enabled: true
   observability:
-    metrics:
-      enableMetrics: true
+    metrics: {}
   deploymentUpdateStrategy: {}
   config:
     exporters:
-      otlphttp/tempo:
-        endpoint: http://tempo-sample-distributor.tempo.svc.cluster.local:4318
-      debug:
-        verbosity: detailed
-        use_internal_logger: false
-      prometheus:
-        endpoint: 0.0.0.0:8989
-        metric_expiration: 10m
-        resource_to_telemetry_conversion:
-          enabled: true # by default resource attributes are dropped
+      otlp:
+        endpoint: 'tempo-sample-distributor.tempo.svc.cluster.local:4317'
+        tls:
+          insecure: true
     receivers:
       otlp:
         protocols:
           grpc:
             endpoint: '0.0.0.0:4317'
-          http:
-            endpoint: '0.0.0.0:4318'
+          http: {}
     service:
       pipelines:
-        metrics:
-          exporters:
-            - debug
-            - prometheus
-          receivers:
-            - otlp
         traces:
           exporters:
-            - debug
-            - otlphttp/tempo
+            - otlp
           receivers:
             - otlp
-      telemetry:
-        metrics:
-          readers:
-            - pull:
-                exporter:
-                  prometheus:
-                    host: 0.0.0.0
-                    port: 8888
-  mode: deployment
-  resources: {}
-  podDnsConfig: {}
-  managementState: managed
-  upgradeStrategy: automatic
-  ingress:
-    route: {}
-  daemonSetUpdateStrategy: {}
-  targetAllocator:
-    allocationStrategy: consistent-hashing
-    collectorNotReadyGracePeriod: 30s
-    collectorTargetReloadInterval: 30s
-    filterStrategy: relabel-config
-    observability:
-      metrics: {}
-    prometheusCR:
-      scrapeInterval: 30s
-    resources: {}
-  replicas: 1
-  ipFamilyPolicy: SingleStack
-  configVersions: 3

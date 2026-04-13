@@ -176,8 +176,9 @@ spec:
         enabled: true
       url: https://thanos-querier.openshift-monitoring.svc.cluster.local:9091
     tracing:
-      enabled: false
+      enabled: true
       grpc_port: 9095
+      internal_url: "http://tempo-tempo-query-frontend.tempo.svc.cluster.local:3200/"
       namespace_selector: true
       tempo_config:
         cache_capacity: 200
@@ -189,7 +190,11 @@ spec:
         use_kiali_token: false
       query_timeout: 5
       disable_version_check: false
-      provider: jaeger
+      provider: tempo
+      tempo_config:
+        org_id: "1"
+        datasource_uid: "a8d2ef1c-d31c-4de5-a90b-e7bc5252cd00"
+        url_format: "grafana"
       use_waypoint_name: false
       is_core: false
       use_grpc: true

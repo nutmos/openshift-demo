@@ -54,7 +54,7 @@ spec:
     cluster_wide_access: true
     logger:
       log_format: text
-      log_level: info
+      log_level: debug
       sampler_rate: '1'
       time_field_format: '2006-01-02T15:04:05Z07:00'
     ingress:
@@ -115,7 +115,7 @@ spec:
         insecure_skip_verify: false
         type: none
         use_kiali_token: false
-      enabled: true
+      enabled: false
       internal_url: 'http://grafana.istio-system:3000'
       is_core: false
     istio:
@@ -165,18 +165,15 @@ spec:
       external_url: "https://console-openshift-console.apps.cluster-m6jjv.m6jjv.sandbox5299.opentlc.com"
     prometheus:
       auth:
-        insecure_skip_verify: false
+        insecure_skip_verify: true
         type: bearer
         use_kiali_token: true
-        ca_file: /kiali-cabundle/service-ca.crt
       cache_duration: 7
       cache_enabled: true
       cache_expiration: 300
       is_core: true
       thanos_proxy:
         enabled: true
-        retention_period: 7d
-        scrape_interval: 30s
       url: https://thanos-querier.openshift-monitoring.svc.cluster.local:9091
     tracing:
       enabled: false

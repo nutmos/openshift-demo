@@ -4,20 +4,27 @@ metadata:
   name: sample
   namespace: tempo
 spec:
+  tenants:
+    mode: openshift
+    authentication:
+    - tenantName: dev
+      tenantId: 1610b0c3-c509-4592-a256-a1871353dbfa # Tenant ID can be anything but must be unique.
   networkPolicy:
     enabled: true
   observability:
     grafana:
       instanceSelector: {}
-    metrics: {}
+    metrics:
+      createServiceMonitors: true
+      createPrometheusRules: true
     tracing:
       jaeger_agent_endpoint: 'localhost:6831'
   timeout: 30s
   resources:
     total:
       limits:
-        cpu: '2'
-        memory: 2Gi
+        cpu: '8'
+        memory: 16Gi
   search:
     defaultResultLimit: 20
     maxDuration: 0s
@@ -43,11 +50,9 @@ spec:
       component:
         podSecurityContext: {}
         replicas: 1
-      enabled: false
+      enabled: true
       ingress:
         route: {}
-      rbac:
-        enabled: false
     ingester:
       podSecurityContext: {}
       replicas: 1
@@ -59,19 +64,7 @@ spec:
         podSecurityContext: {}
         replicas: 1
       jaegerQuery:
-        authentication:
-          enabled: true
-          sar: '{"namespace": "tempo", "resource": "pods", "verb": "get"}'
         enabled: true
-        ingress:
-          route:
-            termination: edge
-          type: route
-        monitorTab:
-          enabled: false
-          prometheusEndpoint: ''
-        servicesQueryDuration: 72h0m0s
-        tempoQuery: {}
       mcpServer: {}
   replicationFactor: 1
   storage:

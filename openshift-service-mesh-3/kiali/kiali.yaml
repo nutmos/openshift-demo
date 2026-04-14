@@ -177,27 +177,23 @@ spec:
       url: https://thanos-querier.openshift-monitoring.svc.cluster.local:9091
     tracing:
       enabled: true
-      grpc_port: 9095
-      internal_url: "http://tempo-tempo-query-frontend.tempo.svc.cluster.local:3200/"
-      namespace_selector: true
+      internal_url: https://tempo-sample-gateway.tempo.svc.cluster.local:8080/
+      external_url: https://console-openshift-console.apps.cluster-m6jjv.m6jjv.sandbox5299.opentlc.com/
+      health_check_url: ''
       tempo_config:
-        cache_capacity: 200
-        cache_enabled: true
-        url_format: grafana
-      auth:
-        insecure_skip_verify: false
-        type: none
-        use_kiali_token: false
+        name: sample
+        namespace: tempo
+        tenant: dev
+        url_format: openshift
       query_timeout: 5
       disable_version_check: false
       provider: tempo
-      tempo_config:
-        org_id: "1"
-        datasource_uid: "a8d2ef1c-d31c-4de5-a90b-e7bc5252cd00"
-        url_format: "grafana"
-      use_waypoint_name: false
-      is_core: false
-      use_grpc: true
+      use_grpc: false
+      auth:
+        type: bearer
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+        insecure_skip_verify: false
+        use_kiali_token: true
   version: default
   kubernetes_config:
     burst: 200

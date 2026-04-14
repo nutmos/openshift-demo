@@ -8,11 +8,34 @@ spec:
     metrics: {}
   deploymentUpdateStrategy: {}
   config:
+    extensions:
+      bearertokenauth:
+        filename: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    processors:
+      k8sattributes:
+        extract:
+          metadata:
+            - k8s.pod.name
+            - k8s.pod.uid
+            - k8s.deployment.name
+            - k8s.namespace.name
+            - k8s.node.name
+        pod_association:
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.ip
+          - sources:
+              - from: connection
     exporters:
       otlp:
-        endpoint: 'tempo-sample-distributor.tempo.svc.cluster.local:4317'
+        endpoint: 'tempo-sample-gateway.tempo.svc.cluster.local:8090'
+        auth:
+          authenticator: bearertokenauth
         tls:
-          insecure: true
+          insecure: false
+          ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
+        headers:
+          X-Scope-OrgID: "dev"
     receivers:
       otlp:
         protocols:
@@ -20,6 +43,7 @@ spec:
             endpoint: '0.0.0.0:4317'
           http: {}
     service:
+      extensions: [bearertokenauth]
       pipelines:
         traces:
           exporters:

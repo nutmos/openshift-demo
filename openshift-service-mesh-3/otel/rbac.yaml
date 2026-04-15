@@ -17,6 +17,7 @@ rules:
   - update
   - watch
 ---
+# This cluster role binding grants otel controller manager role to generate other role bindings
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:

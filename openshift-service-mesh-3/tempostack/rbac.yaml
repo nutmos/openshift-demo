@@ -5,6 +5,7 @@ metadata:
 rules:
   - apiGroups:
       - 'tempo.grafana.com'
+    # The resource names are tenantName in TempoStack
     resources:
       - dev
     resourceNames:
@@ -12,6 +13,7 @@ rules:
     verbs:
       - 'get'
 ---
+# This RBAC grants read permission to tracing for every user that already logged in.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -24,3 +26,63 @@ subjects:
   - kind: Group
     apiGroup: rbac.authorization.k8s.io
     name: system:authenticated
+
+#---
+#apiVersion: rbac.authorization.k8s.io/v1
+#kind: ClusterRole
+#metadata:
+#  name: tempo-sample-clusterrole
+#rules:
+#- apiGroups: [""]
+#  resources: ["pods", "namespaces", "nodes"]
+#  verbs: ["get", "watch", "list"]
+#- apiGroups: ["apps"]
+#  resources: ["replicasets"]
+#  verbs: ["get", "list", "watch"]
+#- apiGroups: ["extensions"]
+#  resources: ["replicasets"]
+#  verbs: ["get", "list", "watch"]
+#---
+#apiVersion: rbac.authorization.k8s.io/v1
+#kind: ClusterRoleBinding
+#metadata:
+#  name: tempo-sample-clusterrole-binding
+#subjects:
+#- kind: ServiceAccount
+#  name: otel-collector
+#  namespace: istio-system
+#roleRef:
+#  kind: ClusterRole
+#  name: tempo-sample-clusterrole
+#  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tempostack-traces-write-rbac
+rules:
+  - apiGroups:
+      - 'tempo.grafana.com'
+    # this needs to match tenant name in the CR/tenants.yaml and the tenant has be sent in X-Scope-OrgID
+    # The API gateway sends the tenantname as resource (res) to OPA sidecar
+    resources:
+      - dev
+    resourceNames:
+      - traces
+    verbs:
+      - 'create'
+---
+# This cluster role binding grants TempoStack write permission to the tenant named "dev" to the otel-collector service account
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tempostack-traces-rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tempostack-traces-write-rbac
+subjects:
+  - kind: ServiceAccount
+    name: otel-collector
+    namespace: istio-system

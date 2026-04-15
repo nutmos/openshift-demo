@@ -132,9 +132,12 @@ spec:
       validation_change_detection_enabled: true
     perses:
       auth:
+        ca_file: ''
         insecure_skip_verify: false
+        password: ''
         type: none
         use_kiali_token: false
+        username: ''
       dashboards:
        - name: Istio Service Dashboard
          variables:
@@ -159,13 +162,15 @@ spec:
            workload: "var-workload"
       enabled: true
       is_core: false
-      project: istio
       url_format: openshift
       project: perses-dev
+      health_check_url: ''
+      internal_url: ''
       external_url: "https://console-openshift-console.apps.cluster-m6jjv.m6jjv.sandbox5299.opentlc.com"
     prometheus:
       auth:
-        insecure_skip_verify: true
+        insecure_skip_verify: false
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
         type: bearer
         use_kiali_token: true
       cache_duration: 7

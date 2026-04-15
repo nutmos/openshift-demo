@@ -14,6 +14,7 @@ rules:
     resources: ["secrets"]
     verbs: ["get", "watch", "list"]
 ---
+# This role binding grants secret read permission.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:

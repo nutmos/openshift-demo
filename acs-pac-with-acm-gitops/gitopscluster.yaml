@@ -2,7 +2,7 @@ apiVersion: apps.open-cluster-management.io/v1beta1
 kind: GitOpsCluster
 metadata:
   name: gitops-cluster-sample
-  namespace: dev
+  namespace: open-cluster-management-clusterset1-set
 spec:
   argoServer:
     cluster: local-cluster
@@ -10,4 +10,4 @@ spec:
   placementRef:
     kind: Placement
     apiVersion: cluster.open-cluster-management.io/v1beta1
-    name: all-openshift-clusters
+    name: clusterset1

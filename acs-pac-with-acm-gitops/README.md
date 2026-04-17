@@ -1,0 +1,1 @@
+# Example of setting up ACS Policy as Code and deploy using ACM GitOps

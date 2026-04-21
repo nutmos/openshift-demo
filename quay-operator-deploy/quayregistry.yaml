@@ -1,0 +1,31 @@
+kind: QuayRegistry
+apiVersion: quay.redhat.com/v1
+metadata:
+  name: quay-demo
+  namespace: registry
+spec:
+  configBundleSecret: quay-demo-config # If you do not specify this config, Quay will create it for you at the first time of the deployment
+  components:
+    - kind: clair
+      managed: true
+    - kind: postgres
+      managed: true
+    - kind: objectstorage
+      managed: false # Set this to true if you prefer to use ODF MCG as an object storage and let Quay manages it.
+    - kind: redis
+      managed: true
+    - kind: horizontalpodautoscaler
+      managed: true
+    - kind: route
+      managed: true
+    - kind: mirror
+      managed: true
+    - kind: monitoring
+      managed: true
+    - kind: tls
+      managed: true
+    - kind: quay
+      managed: true
+    - kind: clairpostgres
+      managed: true
+---

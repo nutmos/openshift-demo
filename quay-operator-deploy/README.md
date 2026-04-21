@@ -1,5 +1,9 @@
 # Deploy Quay on OCP using the operator
 
+This repo contains the example of Quay deployment using Red Hat Quay operator on OCP.
+
+This has been tested with Quay Operator 3.16.3 and OCP 4.18.36.
+
 ## Steps to deploy
 1. Update the configuration on quayregistry-secret.yaml with the access and secret keys to Amazon S3 or other S3-like object storage.
 2. Update the users under the SUPER_USERS list.

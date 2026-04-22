@@ -1,0 +1,39 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: default-gateway
+  namespace: demo
+spec:
+  gatewayClassName: istio
+  listeners:
+  - allowedRoutes:
+      namespaces:
+        from: All
+    name: default
+    port: 80
+    protocol: HTTP
+    hostname: "*.greeter.cluster-bcg8l.bcg8l.sandbox1255.opentlc.com"
+  - allowedRoutes:
+      namespaces:
+        from: All
+    name: default-https
+    port: 443
+    protocol: HTTPS
+    hostname: "*.greeter.cluster-bcg8l.bcg8l.sandbox1255.opentlc.com"
+    tls:
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: greeter-cert
+  - allowedRoutes:
+      namespaces:
+        from: All
+    name: grpc
+    port: 50051
+    protocol: HTTPS
+    hostname: "gateway.greeter.cluster-bcg8l.bcg8l.sandbox1255.opentlc.com"
+    tls:
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: greeter-cert

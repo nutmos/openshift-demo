@@ -1,0 +1,13 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: greeter-server
+spec:
+  parentRefs:
+  - name: default-gateway
+  hostnames:
+  - "gateway.greeter.cluster-bcg8l.bcg8l.sandbox1255.opentlc.com"
+  rules:
+  - backendRefs:
+    - name: greeter-server
+      port: 50051

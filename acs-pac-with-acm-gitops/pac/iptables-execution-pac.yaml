@@ -1,0 +1,50 @@
+apiVersion: config.stackrox.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: iptables-execution-pac
+spec:
+  policyName: iptables Execution PAC
+  description: Detects execution of iptables; iptables is a deprecated way of managing network state in containers
+  rationale: iptables is a deprecated way of managing network state in containers
+  remediation: Check for any processes that may be modifying iptables rules. Check for open ports that may be allowing code injection to modify iptables rules
+  categories:
+    - Network Tools
+  lifecycleStages:
+    - RUNTIME
+  eventSource: DEPLOYMENT_EVENT
+  exclusions:
+    - deployment:
+        name: haproxy-.*
+        scope:
+          namespace: openshift-vsphere-infra
+    - deployment:
+        name: keepalived-.*
+        scope:
+          namespace: openshift-vsphere-infra
+    - deployment:
+        name: ovnkube-node
+        scope:
+          namespace: openshift-ovn-kubernetes
+    - deployment:
+        scope:
+          namespace: kube-system
+    - deployment:
+        scope:
+          namespace: istio-system
+    - deployment:
+        scope:
+          namespace: openshift-sdn
+  severity: HIGH_SEVERITY
+  policySections:
+    - policyGroups:
+        - fieldName: Process Name
+          booleanOperator: OR
+          values:
+            - value: iptables
+  mitreAttackVectors:
+    - tactic: TA0005
+      techniques:
+        - T1562.004
+  criteriaLocked: false
+  mitreVectorsLocked: false
+  isDefault: false

@@ -6,7 +6,7 @@ spec:
   parentRefs:
   - name: default-gateway
   hostnames:
-  - "httpd.greeter.cluster-bcg8l.bcg8l.sandbox1255.opentlc.com"
+  - "httpd.greeter.cluster-tf4q6.tf4q6.sandbox3743.opentlc.com"
   rules:
   - backendRefs:
     - name: httpd

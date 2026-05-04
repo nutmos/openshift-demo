@@ -1,0 +1,1 @@
+grpcurl -insecure -v -proto helloworld.proto -d '{"name":"nutmos"}' gateway.greeter.cluster-tf4q6.tf4q6.sandbox3743.opentlc.com:50051 helloworld.Greeter.SayHello

@@ -12,14 +12,14 @@ spec:
     name: default
     port: 80
     protocol: HTTP
-    hostname: "*.greeter.cluster-tf4q6.tf4q6.sandbox3743.opentlc.com"
+    hostname: "httpd.greeter.${CLUSTER_NAME}"
   - allowedRoutes:
       namespaces:
         from: All
     name: default-https
     port: 443
     protocol: HTTPS
-    hostname: "*.greeter.cluster-tf4q6.tf4q6.sandbox3743.opentlc.com"
+    hostname: "httpd.greeter.${CLUSTER_NAME}"
     tls:
       certificateRefs:
       - kind: Secret
@@ -31,7 +31,7 @@ spec:
     name: grpc
     port: 50051
     protocol: HTTPS
-    hostname: "gateway.greeter.cluster-tf4q6.tf4q6.sandbox3743.opentlc.com"
+    hostname: "gateway.greeter.${CLUSTER_NAME}"
     tls:
       certificateRefs:
       - kind: Secret

@@ -6,7 +6,7 @@ spec:
   parentRefs:
   - name: default-gateway
   hostnames:
-  - "gateway.greeter.cluster-tf4q6.tf4q6.sandbox3743.opentlc.com"
+  - "gateway.greeter.${CLUSTER_NAME}"
   rules:
   - backendRefs:
     - name: greeter-server

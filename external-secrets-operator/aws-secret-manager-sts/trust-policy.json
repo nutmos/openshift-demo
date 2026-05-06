@@ -9,7 +9,7 @@
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
                 "StringEquals": {
-                    "oidc.op1.openshiftapps.com/2q3ltlp6g55q7kcnbkuunis3p5jjl5o2:sub": "system:serviceaccount:eso-test:my-serviceaccount"
+                    "<oidc-provider-id>:sub": "system:serviceaccount:eso-test:my-serviceaccount"
                 }
             }
         }

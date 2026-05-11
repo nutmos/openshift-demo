@@ -2,6 +2,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: GRPCRoute
 metadata:
   name: greeter-server
+  namespace: gwapi-test
 spec:
   parentRefs:
   - name: default-gateway

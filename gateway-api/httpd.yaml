@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: httpd
-  namespace: demo
+  namespace: gwapi-test
 spec:
   ports:
   - port: 8080
@@ -17,7 +17,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: httpd
-  namespace: demo
+  namespace: gwapi-test
 spec:
   progressDeadlineSeconds: 600
   replicas: 3

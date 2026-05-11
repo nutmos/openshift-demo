@@ -25,7 +25,7 @@ You can deploy GRPCRoute along with the greeter-server resources. This will prov
 You can use the `grpcurl` command to query the service. This service does not support the reflect protocol. So, you need to use a protobuf file.
 
 ```
-$ grpcurl -insecure -v -proto helloworld.proto -d '{"name":"nutmos"}' gateway.greeter.cluster-tf4q6.tf4q6.sandbox3743.opentlc.com:50051 helloworld.Greeter.SayHello
+$ grpcurl -insecure -v -proto helloworld.proto -d '{"name":"nutmos"}' gateway.greeter.${CLUSTER_NAME}:50051 helloworld.Greeter.SayHello
 Resolved method descriptor:
 // Sends a greeting
 rpc SayHello ( .helloworld.HelloRequest ) returns ( .helloworld.HelloReply );

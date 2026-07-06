@@ -1,0 +1,40 @@
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: example-bundle
+spec:
+  sources:
+  - inLine: |
+      -----BEGIN CERTIFICATE-----
+      MIIDMjCCAhqgAwIBAgIIF08ORAy2xicwDQYJKoZIhvcNAQELBQAwNzESMBAGA1UE
+      CxMJb3BlbnNoaWZ0MSEwHwYDVQQDExhrdWJlLWFwaXNlcnZlci1sYi1zaWduZXIw
+      HhcNMjYwNjE4MDY0NzM1WhcNMzYwNjE1MDY0NzM1WjA3MRIwEAYDVQQLEwlvcGVu
+      c2hpZnQxITAfBgNVBAMTGGt1YmUtYXBpc2VydmVyLWxiLXNpZ25lcjCCASIwDQYJ
+      KoZIhvcNAQEBBQADggEPADCCAQoCggEBAJcdPvQ+tS19i0s+kIX1oWFCdbLa7CS8
+      /X1uqXk/ye6zgQPo8FAHpBT0p6S7CoXG5knkUa5mEniNq/VhxIWAzP3FzyIXWHms
+      kP7JesXdRMYOW8d3I4tEwx95eamqB9WZb+XD9o+BypELBMAM7HUFl9ppJrtqG83E
+      KLE0iCmpB/khak2nqXO43VgaTwcU1hi/SEaUr79civ0qg4q2BfAQxSg6yq1b6LS1
+      HZWSYoo8YKC5GEyzKFf5SCHFjlkMQNkuYzX9F+AjIpM2D8R8Ri6nHC3WEeIgQbFK
+      lCfd/dZDMclLa8LhwwP71f7+OR4Z317UyXWsz0Pgz6y+G/9a9dDiDYECAwEAAaNC
+      MEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMNc
+      hnWHMsFM8RK946JwhMy2mUVWMA0GCSqGSIb3DQEBCwUAA4IBAQCAdPaNFQIfPLry
+      2huytbvACg8wgbUEqkMBkEcMHOroQ3L8y4+H9vobB4VCICY6iJtby12k8m/fnnD/
+      nGjx4FEkWbGiCfBQJYXkxXckh0JU9cJcohfVJp1jYCzHRqEHMy7wNI5bbMqXjOa7
+      JSxJQ0PY2AGGOtkuBW55NPaWmlIyXzkNPz8DgbZakXW4sPd41XtMaKvUMajulcip
+      ihHqblXviVY55GooJG4bS3hJD+LJ3MxOBcqWotNFEJ9huGg0bEMvHlkC8pPeilB8
+      ZWFtFhdrmADBtuRXSLSwtwH1SDFUkqXq1KbSO+Kjy1FM/u0MOOFo0esCWcOPrNDc
+      6L+02pjz
+      -----END CERTIFICATE-----
+  target:
+    additionalFormats:
+      jks:
+        key: bundle.jks
+        password: changeit
+      pkcs12:
+        key: bundle.p12
+        password: changeit
+    configMap:
+      key: ca-certificates.crt
+    namespaceSelector:
+      matchLabels:
+        cert-manager-inject: "true"

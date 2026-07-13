@@ -17,3 +17,14 @@ roxctl central whoami
 ```
 roxctl image scan -i quay.io/nutmos/nginx:test-v1
 ```
+
+## Scanner Definition
+
+```
+# Download
+roxctl scanner download-db --scanner-db-file scanner-vuln-updates.zip
+# Upload
+roxctl scanner upload-db \
+  -e "$ROX_CENTRAL_ADDRESS" \
+  --scanner-db-file=<compressed_scanner_definitions.zip>
+```

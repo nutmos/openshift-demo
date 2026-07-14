@@ -9,7 +9,7 @@ metadata:
     include.release.openshift.io/single-node-developer: "true"
   labels:
     role: alert-rules
-  name: prometheus
+  name: quay-volume-alerts
   namespace: $QUAY_REGISTRY_NAMESPACE
 spec:
   groups:

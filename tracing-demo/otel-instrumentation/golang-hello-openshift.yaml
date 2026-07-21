@@ -15,12 +15,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      deployment: golang-hello-openshift
+      app: golang-hello-openshift
   template:
     metadata:
       creationTimestamp: null
       labels:
-        deployment: golang-hello-openshift
+        app: golang-hello-openshift
       annotations:
         instrumentation.opentelemetry.io/inject-go: 'true' # This annotation enables OpenTelemetry auto-instrumentation for Go applications. It tells the OpenTelemetry Operator to inject the necessary instrumentation libraries and configurations into the application container.
         instrumentation.opentelemetry.io/otel-go-auto-target-exe: /main # The path to the executable to be instrumented. This is required for Go applications.
@@ -34,7 +34,6 @@ spec:
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
-          imagePullPolicy: IfNotPresent
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
@@ -49,3 +48,41 @@ spec:
       maxSurge: 25%
   revisionHistoryLimit: 10
   progressDeadlineSeconds: 600
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: golang-hello-openshift
+  namespace: tracing-demo
+  labels:
+    app: golang-hello-openshift
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: golang-hello-openshift
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: golang-hello-openshift
+  namespace: tracing-demo
+  labels:
+    app: golang-hello-openshift
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  to:
+    kind: Service
+    name: golang-hello-openshift
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: None
+  wildcardPolicy: None

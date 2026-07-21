@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: golang-hello-openshift
+  namespace: tracing-demo
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: golang-hello-openshift
+  namespace: tracing-demo
+  labels:
+    app: golang-hello-openshift
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: golang-hello-openshift
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        deployment: golang-hello-openshift
+      annotations:
+        instrumentation.opentelemetry.io/inject-go: 'true' # This annotation enables OpenTelemetry auto-instrumentation for Go applications. It tells the OpenTelemetry Operator to inject the necessary instrumentation libraries and configurations into the application container.
+        instrumentation.opentelemetry.io/otel-go-auto-target-exe: /main # The path to the executable to be instrumented. This is required for Go applications.
+    spec:
+      containers:
+        - name: golang-hello-openshift
+          image: 'ghcr.io/nutmos/golang-hello-openshift:0.1'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: golang-hello-openshift
+      serviceAccount: golang-hello-openshift
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

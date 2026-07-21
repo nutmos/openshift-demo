@@ -1,0 +1,81 @@
+apiVersion: tempo.grafana.com/v1alpha1
+kind: TempoStack
+metadata:
+  name: sample
+  namespace: tempo
+spec:
+  tenants:
+    mode: openshift
+    authentication:
+    - tenantName: dev
+      tenantId: 1610b0c3-c509-4592-a256-a1871353dbfa # Tenant ID can be anything but must be unique.
+  networkPolicy:
+    enabled: true
+  observability:
+    grafana:
+      instanceSelector: {}
+    metrics:
+      createServiceMonitors: true
+      createPrometheusRules: true
+    tracing:
+      jaeger_agent_endpoint: 'localhost:6831'
+  timeout: 30s
+  resources:
+    total:
+      limits:
+        cpu: '8'
+        memory: 16Gi
+  search:
+    defaultResultLimit: 20
+    maxDuration: 0s
+  managementState: Managed
+  limits:
+    global:
+      ingestion: {}
+      query:
+        maxSearchDuration: 0s
+  serviceAccount: tempo-sample
+  images: {}
+  template:
+    compactor:
+      podSecurityContext: {}
+      replicas: 1
+    distributor:
+      component:
+        podSecurityContext: {}
+        replicas: 1
+      tls:
+        enabled: false
+    gateway:
+      component:
+        podSecurityContext: {}
+        replicas: 1
+      enabled: true
+      ingress:
+        route: {}
+    ingester:
+      podSecurityContext: {}
+      replicas: 1
+    querier:
+      podSecurityContext: {}
+      replicas: 1
+    queryFrontend:
+      component:
+        podSecurityContext: {}
+        replicas: 1
+      jaegerQuery:
+        enabled: true
+      mcpServer: {}
+  replicationFactor: 1
+  storage:
+    secret:
+      name: tempostack-s3
+      type: s3
+    tls:
+      enabled: false
+  storageSize: 1Gi
+  hashRing:
+    memberlist: {}
+  retention:
+    global:
+      traces: 48h0m0s

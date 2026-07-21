@@ -22,7 +22,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: otel-collector
-  namespace: istio-system
+  namespace: otel
 roleRef:
   kind: ClusterRole
   name: tempo-sample-clusterrole
@@ -56,4 +56,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: otel-collector
-    namespace: istio-system
+    namespace: otel

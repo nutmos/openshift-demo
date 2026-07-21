@@ -1,0 +1,12 @@
+kind: Instrumentation
+apiVersion: opentelemetry.io/v1alpha1
+metadata:
+  name: instrumentation
+  namespace: otel
+spec:
+  exporter:
+    endpoint: 'http://otel-collector-headless:4317'
+  python:
+    env:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: http://otel-collector:4318

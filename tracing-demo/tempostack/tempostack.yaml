@@ -12,13 +12,13 @@ spec:
   networkPolicy:
     enabled: true
   observability:
-    grafana:
-      instanceSelector: {}
+    #grafana:
+    #  instanceSelector: {}
     metrics:
       createServiceMonitors: true
       createPrometheusRules: true
-    tracing:
-      jaeger_agent_endpoint: 'localhost:6831'
+    #tracing:
+    #  jaeger_agent_endpoint: 'localhost:6831'
   timeout: 30s
   resources:
     total:

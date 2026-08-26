@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: quay-volume-alerts
+  namespace: quay-enterprise
+  labels:
+    role: alert-rules
+spec:
+  groups:
+  - name: kubernetes-storage
+    rules:
+    - alert: QuayEnterprisePersistentVolumeErrors
+      for: 1m
+      labels: { severity: warning }
+      expr: kube_persistentvolumeclaim_status_phase{phase=~"Failed|Pending",namespace="quay-enterprise",job="kube-state-metrics"} > 0
